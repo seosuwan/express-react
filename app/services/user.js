@@ -80,7 +80,7 @@ export default function UserService() {
             User.findOne({
                 userid: req.body.userid
             },
-            console.log("req.session : ", req.session),
+            console.log("req.session : ", req.headers),
 
             function (err, user) {
                
@@ -108,9 +108,10 @@ export default function UserService() {
                                     // 토큰을 저장한다. 어디에? 쿠키, 로컬스토리지
                                 
                                     res
-                                    
+
                                         .status(200)
                                         .json(user)
+                                        console.log(res.json(),"뭐가들어있을까요")
                                     
                             })
                         }
