@@ -68,17 +68,22 @@ export default function UserService() {
                                 .send(err)
 
                             // 토큰을 저장한다. 어디에? 쿠키, 로컬스토리지
-                        res
-
-                            .status(200)
-                            .json(user)})
+                            res
+                                
+                                .status(200)
+                                .json(user)})
                 }
             })
         },
         login(req, res) {
+            
             User.findOne({
                 userid: req.body.userid
-            }, function (err, user) {
+            },
+            console.log("req.session : ", req.session),
+
+            function (err, user) {
+               
                 if (err) 
                     throw err
                 if (!user) {
@@ -101,10 +106,11 @@ export default function UserService() {
                                         .send(err)
 
                                     // 토큰을 저장한다. 어디에? 쿠키, 로컬스토리지
-                                res
-
-                                    .status(200)
-                                    .json(user)
+                                
+                                    res
+                                    
+                                        .status(200)
+                                        .json(user)
                                     
                             })
                         }
