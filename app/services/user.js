@@ -61,7 +61,7 @@ export default function UserService() {
                         .send({success: false, message: '해당 ID가 존재하지 않습니다'});
                 } else {   
                     console.log("토큰좀 보내봐랑")
-                    user.generateToken((err, user) => {
+                    user.findByToken((err, user) => {
                         if (err) 
                             res
                                 .status(400)
@@ -80,9 +80,11 @@ export default function UserService() {
             User.findOne({
                 userid: req.body.userid
             },
-            console.log("req.session : ", req.headers),
+            // console.log("req.session : "),
 
             function (err, user) {
+
+                
                
                 if (err) 
                     throw err
@@ -91,7 +93,7 @@ export default function UserService() {
                         .status(401)
                         .send({success: false, message: '해당 ID가 존재하지 않습니다'});
                 } else {
-                    console.log(' ### 로그인 정보: ' + JSON.stringify(user))
+                    console.log(' ### 로그인 정보: ' + JSON.stringify(user.headers))
                     
                     user.comparePassword(req.body.password, function (_err, isMatch) {
                         if (!isMatch) {
@@ -111,7 +113,7 @@ export default function UserService() {
 
                                         .status(200)
                                         .json(user)
-                                        console.log(res.json(),"뭐가들어있을까요")
+                                        // console.log(res.json(),"뭐가들어있을까요")
                                     
                             })
                         }
@@ -177,3 +179,4 @@ export default function UserService() {
 
     } // return
 }
+

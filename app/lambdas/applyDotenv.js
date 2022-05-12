@@ -4,7 +4,8 @@ const applyDotenv = dotenv => {
         mongoUri : process.env.MONGO_URI,
         port : process.env.PORT,
         jwtSecret : process.env.JWT_SECERT,
-        origin : process.env.ORIGIN
+        origin : process.env.ORIGIN,
+        cookiesecret :  process.env.COOKIE_SECRET,
     }
 }
 

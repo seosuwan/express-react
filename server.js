@@ -13,38 +13,12 @@ import getResponse from "./app/lambdas/getResponse.js"
 import applyPassport from './app/lambdas/applyPassport.js'
 import applyDotenv from './app/lambdas/applyDotenv.js'
 import cookieParser from 'cookie-parser'
-import session from "express-session";
+import session from 'express-session'
+import MongoStore from "connect-mongo";
 
 async function startServer() {
-    const ck = cookieParser;
     const app = express();
     const {mongoUri, port, jwtSecret } = applyDotenv(dotenv)
-
-    app.use(ck(process.env.COOKIE_SECRET));
-    if (process.env.NODE_ENV === 'production') {
-      app.use(
-        session({
-          secret: process.env.COOKIESCRET,
-          resave: false,
-          saveUninitialized: false,
-          proxy: true, // nginx express session cookie
-          cookie: {
-            httpOnly: true,
-            secure: true,
-            sameSite: process.env.NODE_ENV === 'development' ? false : 'none',
-            domain: process.env.NODE_ENV === 'production' && '.coding-factory.site',
-          },
-        })
-      ); // 세션 활성화
-    } else {
-      app.use(
-        session({
-          secret: process.env.COOKIESCRET,
-          resave: false,
-          saveUninitialized: false,
-        })
-      ); // 세션 활성화
-    }
 
     app.use(express.static('public'));
     app.use(express.urlencoded({extended: true}));
@@ -72,9 +46,9 @@ async function startServer() {
             process.exit();
         });
     
-    app.all("*", function(_req, res) {
-      return getResponse.notFoundResponse(res, "페이지를 찾을 수 없습니다");
-    });
+    // app.all("*", function(_req, res) {
+    //   return getResponse.notFoundResponse(res, "페이지를 찾을 수 없습니다");
+    // });
     
     app.use((err, _req, res) => {
       if(err.name == "UnauthorizedError"){

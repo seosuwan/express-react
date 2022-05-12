@@ -58,14 +58,21 @@ export default function UserModel(mongoose) {
             var user = this;
             // json web token 이용하여 token 생성하기 user id 와 두번째 param 으로 토큰을 만들고, param 을 이용하여
             // 나중에 userid를 찾아낸다.
-            console.log(" jwtSecret >> "+ jwtSecret)
+            console.log(" jwtSecret >> "+ typeof(jwtSecret))
             var token = jwt.sign(user._id.toHexString(), jwtSecret)
 
             user.token = token
+
+            const serialised = ("OursiteJWT", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== "development",
+                sameSite: "strict",
+                path: "/"
+            })
             user.save(function (err, user) {
                 if (err) 
                     return cb(err);
-                cb(null, user)
+                cb(null, user , serialised)
             })
         },
         userSchema.statics.findByToken = function (token, cb) {
